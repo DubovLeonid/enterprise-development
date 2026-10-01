@@ -1,12 +1,11 @@
-﻿namespace BeautySalon.Models
-{
-    /// <summary>Пол человека.</summary>
-    public enum Gender
-    {
-        /// <summary>Мужской.</summary>
-        Male,
+﻿namespace Salon.Models;
 
-        /// <summary>Женский.</summary>
-        Female
-    }
+/// <summary>Пол человека.</summary>
+public enum Gender
+{
+    /// <summary>Мужской.</summary>
+    Male,
+
+    /// <summary>Женский.</summary>
+    Female
 }

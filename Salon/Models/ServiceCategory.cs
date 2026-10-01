@@ -1,21 +1,20 @@
-﻿namespace BeautySalon.Models
+﻿namespace Salon.Models;
+
+/// <summary>Категории услуг, оказываемых салоном.</summary>
+public enum ServiceCategory
 {
-    /// <summary>Категории услуг, оказываемых салоном.</summary>
-    public enum ServiceCategory
-    {
-        /// <summary>Парикмахерские услуги.</summary>
-        Hairdressing,
+    /// <summary>Парикмахерские услуги.</summary>
+    Hairdressing,
 
-        /// <summary>Маникюр и педикюр.</summary>
-        Nails,
+    /// <summary>Маникюр и педикюр.</summary>
+    Nails,
 
-        /// <summary>Косметология.</summary>
-        Cosmetology,
+    /// <summary>Косметология.</summary>
+    Cosmetology,
 
-        /// <summary>Макияж.</summary>
-        Makeup,
+    /// <summary>Макияж.</summary>
+    Makeup,
 
-        /// <summary>Массаж.</summary>
-        Massage
-    }
+    /// <summary>Массаж.</summary>
+    Massage
 }
