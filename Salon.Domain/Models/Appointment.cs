@@ -7,7 +7,7 @@ public class Appointment
     public required Guid Id { get; init; }
 
     /// <summary>Дата и время начала услуги.</summary>
-    public required DateTime DateTime { get; init; }
+    public required DateTime StartTime { get; init; }
 
     /// <summary>Идентификатор клиента.</summary>
     public required Guid ClientId { get; init; }
@@ -32,5 +32,5 @@ public class Appointment
 
     /// <summary>Строковое представление записи.</summary>
     public override string ToString() =>
-        $"{DateTime:dd.MM.yyyy HH:mm} | {Client.FullName} - {Master.FullName} | {Service.Name}";
+        $"{StartTime:dd.MM.yyyy HH:mm} | {Client.FullName} - {Master.FullName} | {Service.Name}";
 }

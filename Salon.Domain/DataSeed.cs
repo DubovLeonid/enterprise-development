@@ -85,7 +85,7 @@ public class DataSeed
             appointments.Add(new Appointment
             {
                 Id = Guid.NewGuid(),
-                DateTime = dt,
+                StartTime = dt,
                 ClientId = client.Id,
                 MasterId = master.Id,
                 ServiceId = service.Id,

@@ -49,7 +49,7 @@ public class SalonTests(DataSeed data, ITestOutputHelper output) : IClassFixture
 
         var appointments = _data.Appointments
             .Where(a => a.MasterId == selectedMaster.Id)
-            .OrderBy(a => a.DateTime)
+            .OrderBy(a => a.StartTime)
             .ToList();
 
         var windows = new List<(DateTime Start, DateTime End, TimeSpan Duration)>();
@@ -58,11 +58,11 @@ public class SalonTests(DataSeed data, ITestOutputHelper output) : IClassFixture
         {
             var current = appointments[i];
             var next = appointments[i + 1];
-            var endCurrent = current.DateTime + current.Service.Duration;
-            var free = next.DateTime - endCurrent;
+            var endCurrent = current.StartTime + current.Service.Duration;
+            var free = next.StartTime - endCurrent;
 
             if (free > TimeSpan.Zero)
-                windows.Add((endCurrent, next.DateTime, free));
+                windows.Add((endCurrent, next.StartTime, free));
         }
 
 
@@ -73,8 +73,8 @@ public class SalonTests(DataSeed data, ITestOutputHelper output) : IClassFixture
         Assert.Single(windows);
         Assert.Equal(expectedDuration, windows[0].Duration);
 
-        var secondGap = appointments[2].DateTime
-            - (appointments[1].DateTime + appointments[1].Service.Duration);
+        var secondGap = appointments[2].StartTime
+            - (appointments[1].StartTime + appointments[1].Service.Duration);
         Assert.True(secondGap <= TimeSpan.Zero);
     }
 
@@ -126,7 +126,7 @@ public class SalonTests(DataSeed data, ITestOutputHelper output) : IClassFixture
 
 
         var perClient = _data.Appointments
-            .Where(a => a.DateTime >= startDate && a.DateTime < endDate && a.IsRegular)
+            .Where(a => a.StartTime >= startDate && a.StartTime < endDate && a.IsRegular)
             .GroupBy(a => a.Client)
             .Select(g => new
             {
