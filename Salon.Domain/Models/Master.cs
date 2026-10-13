@@ -1,16 +1,16 @@
-﻿namespace Salon.Models;
+﻿namespace Salon.Domain.Models;
 
 /// <summary>Мастер салона красоты.</summary>
 public class Master : Person
 {
     /// <summary>Серия и номер паспорта.</summary>
-    public string PassportNumber { get; set; } = string.Empty;
+    public required string PassportNumber { get; init; }
 
     /// <summary>Специализация.</summary>
-    public string Specialization { get; set; } = string.Empty;
+    public required string Specialization { get; init; }
 
     /// <summary>Стаж работы в годах.</summary>
-    public int ExperienceYears { get; set; }
+    public required int ExperienceYears { get; init; }
 
     /// <summary>Строковое представление мастера, включая паспорт и стаж.</summary>
     public override string ToString() =>

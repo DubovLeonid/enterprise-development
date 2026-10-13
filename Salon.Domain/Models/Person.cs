@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Salon.Domain.Enums;
 
-namespace Salon.Models;
+namespace Salon.Domain.Models;
 
 /// <summary>
 /// Базовый класс для клиента и мастера салона красоты.
@@ -8,16 +8,16 @@ namespace Salon.Models;
 public abstract class Person
 {
     /// <summary>Уникальный идентификатор персоны.</summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public required Guid Id { get; init; }
 
     /// <summary>Полное имя.</summary>
-    public string FullName { get; set; } = string.Empty;
+    public required string FullName { get; init; }
 
     /// <summary>Пол.</summary>
-    public Gender Gender { get; set; }
+    public required Gender Gender { get; init; }
 
     /// <summary>Дата рождения.</summary>
-    public DateTime BirthDate { get; set; }
+    public required DateOnly BirthDate { get; init; }
 
     /// <summary>Строковое представление персоны.</summary>
     public override string ToString() =>

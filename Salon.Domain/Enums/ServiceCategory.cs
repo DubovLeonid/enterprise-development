@@ -1,20 +1,20 @@
-﻿namespace Salon.Models;
+﻿namespace Salon.Domain.Enums;
 
 /// <summary>Категории услуг, оказываемых салоном.</summary>
 public enum ServiceCategory
 {
     /// <summary>Парикмахерские услуги.</summary>
-    Hairdressing,
+    Hairdressing = 1,
 
     /// <summary>Маникюр и педикюр.</summary>
-    Nails,
+    Nails = 2,
 
     /// <summary>Косметология.</summary>
-    Cosmetology,
+    Cosmetology = 3,
 
     /// <summary>Макияж.</summary>
-    Makeup,
+    Makeup = 4,
 
     /// <summary>Массаж.</summary>
-    Massage
+    Massage = 5
 }

@@ -1,11 +1,11 @@
-﻿namespace Salon.Models;
+﻿namespace Salon.Domain.Enums;
 
 /// <summary>Пол человека.</summary>
 public enum Gender
 {
     /// <summary>Мужской.</summary>
-    Male,
+    Male = 1,
 
     /// <summary>Женский.</summary>
-    Female
+    Female = 2
 }

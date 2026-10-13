@@ -1,36 +1,34 @@
-﻿using System;
+﻿namespace Salon.Domain.Models;
 
-namespace Salon.Models;
-
-/// <summary>Запись клиента на услугу к мастеруИ.</summary>
+/// <summary>Запись клиента на услугу к мастеру.</summary>
 public class Appointment
 {
     /// <summary>Уникальный идентификатор записи.</summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public required Guid Id { get; init; }
 
     /// <summary>Дата и время начала услуги.</summary>
-    public DateTime DateTime { get; set; }
+    public required DateTime DateTime { get; init; }
 
     /// <summary>Идентификатор клиента.</summary>
-    public Guid ClientId { get; set; }
+    public required Guid ClientId { get; init; }
 
     /// <summary>Идентификатор мастера.</summary>
-    public Guid MasterId { get; set; }
+    public required Guid MasterId { get; init; }
 
     /// <summary>Идентификатор услуги.</summary>
-    public Guid ServiceId { get; set; }
+    public required Guid ServiceId { get; init; }
 
     /// <summary>Признак постоянного клиента.</summary>
-    public bool IsRegular { get; set; }
+    public required bool IsRegular { get; init; }
 
     /// <summary>Клиент, записавшийся на услугу.</summary>
-    public Client Client { get; set; } = null!;
+    public required Client Client { get; init; }
 
     /// <summary>Мастер, оказывающий услугу.</summary>
-    public Master Master { get; set; } = null!;
+    public required Master Master { get; init; }
 
     /// <summary>Услуга, на которую записан клиент.</summary>
-    public Service Service { get; set; } = null!;
+    public required Service Service { get; init; }
 
     /// <summary>Строковое представление записи.</summary>
     public override string ToString() =>

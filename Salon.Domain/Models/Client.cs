@@ -1,10 +1,10 @@
-﻿namespace Salon.Models;
+﻿namespace Salon.Domain.Models;
 
 /// <summary>Клиент салона красоты.</summary>
 public class Client : Person
 {
     /// <summary>Контактный телефон.</summary>
-    public string Phone { get; set; } = string.Empty;
+    public required string Phone { get; init; }
 
     /// <summary>Строковое представление клиента, включая телефон.</summary>
     public override string ToString() =>

@@ -1,24 +1,24 @@
-﻿using System;
+﻿using Salon.Domain.Enums;
 
-namespace Salon.Models;
+namespace Salon.Domain.Models;
 
 /// <summary>Услуга, оказываемая салоном.</summary>
 public class Service
 {
     /// <summary>Уникальный идентификатор услуги.</summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public required Guid Id { get; init; }
 
     /// <summary>Название услуги.</summary>
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; init; }
 
     /// <summary>Категория услуги.</summary>
-    public ServiceCategory Category { get; set; }
+    public required ServiceCategory Category { get; init; }
 
     /// <summary>Стоимость услуги в рублях.</summary>
-    public decimal Price { get; set; }
+    public required decimal Price { get; init; }
 
     /// <summary>Длительность услуги.</summary>
-    public TimeSpan Duration { get; set; }
+    public required TimeSpan Duration { get; init; }
 
     /// <summary>Строковое представление услуги.</summary>
     public override string ToString() =>
