@@ -50,7 +50,7 @@ public class ClientsController : ControllerBase
 
     /// <summary>
     /// Обновить данные существующего клиента.
-    /// <summary>
+    /// </summary>
     [HttpPut("{id:guid}")]
     public IActionResult Update(Guid id, [FromBody] CreateClientDto dto)
     {
