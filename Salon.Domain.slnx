@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Salon.Api/Salon.Api.csproj" />
   <Project Path="Salon.Domain/Salon.Domain.csproj" />
   <Project Path="Salon.Tests/Salon.Tests.csproj" />
 </Solution>
