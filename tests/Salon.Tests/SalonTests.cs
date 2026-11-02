@@ -1,7 +1,6 @@
 ﻿using Salon.Application.Services;
 using Salon.Domain.Seeds;
 using Salon.Infrastructure.InMemory.Repositories;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Salon.Tests;
@@ -9,22 +8,16 @@ namespace Salon.Tests;
 /// <summary>
 /// Unit-тесты для предметной области «Салон красоты».
 /// </summary>
-public class SalonTests : IAsyncLifetime
+public class SalonTests(ITestOutputHelper output) : IAsyncLifetime
 {
-    private readonly ITestOutputHelper _output;
-    private readonly DataSeed _data;
+    private readonly ITestOutputHelper _output = output;
+    private readonly DataSeed _data = new();
     private AnalyticsService _analyticsService = null!;
 
     private readonly InMemoryClientRepository _clientRepo = new();
     private readonly InMemoryMasterRepository _masterRepo = new();
     private readonly InMemoryServiceRepository _serviceRepo = new();
     private readonly InMemoryAppointmentRepository _appointmentRepo = new();
-
-    public SalonTests(ITestOutputHelper output)
-    {
-        _output = output;
-        _data = new DataSeed();
-    }
 
     /// <summary>
     /// Асинхронная инициализация репозиториев перед запуском тестов.

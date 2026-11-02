@@ -71,7 +71,7 @@ public class MasterService(IMasterRepository masterRepo) : IMasterService
         };
         await _masterRepo.AddAsync(master);
 
-        
+
         return new MasterDto
         {
             Id = master.Id,

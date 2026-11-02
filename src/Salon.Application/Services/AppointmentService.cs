@@ -71,7 +71,7 @@ public class AppointmentService(IAppointmentRepository appointmentRepo) : IAppoi
         };
         await _appointmentRepo.AddAsync(appointment);
 
-        
+
         return new AppointmentDto
         {
             Id = appointment.Id,

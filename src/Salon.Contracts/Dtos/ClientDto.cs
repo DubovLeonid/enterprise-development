@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using Salon.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Salon.Contracts.Dtos;
 

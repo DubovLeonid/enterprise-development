@@ -65,7 +65,7 @@ public class ServiceService(IServiceRepository serviceRepo) : IServiceService
         };
         await _serviceRepo.AddAsync(service);
 
-        
+
         return new ServiceDto
         {
             Id = service.Id,

@@ -1,5 +1,5 @@
-﻿using System.Linq.Expressions;
-using Salon.Domain.Models;
+﻿using Salon.Domain.Models;
+using System.Linq.Expressions;
 
 namespace Salon.Domain.Interfaces;
 

@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using Salon.Domain.Interfaces;
+﻿using Salon.Domain.Interfaces;
 using Salon.Domain.Models;
+using System.Linq.Expressions;
 
 namespace Salon.Infrastructure.InMemory.Repositories;
 
