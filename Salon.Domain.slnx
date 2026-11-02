@@ -1,5 +1,14 @@
 <Solution>
-  <Project Path="Salon.Api/Salon.Api.csproj" />
-  <Project Path="Salon.Domain/Salon.Domain.csproj" />
-  <Project Path="Salon.Tests/Salon.Tests.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/Salon.Api/Salon.Api.csproj" />
+    <Project Path="src/Salon.AppHost/Salon.AppHost.csproj" />
+    <Project Path="src/Salon.Application/Salon.Application.csproj" />
+    <Project Path="src/Salon.Contracts/Salon.Contracts.csproj" />
+    <Project Path="src/Salon.Domain/Salon.Domain.csproj" />
+    <Project Path="src/Salon.Infrastructure.InMemory/Salon.Infrastructure.InMemory.csproj" />
+    <Project Path="src/Salon.ServiceDefaults/Salon.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Salon.Tests/Salon.Tests.csproj" />
+  </Folder>
 </Solution>

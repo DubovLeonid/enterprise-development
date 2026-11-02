@@ -1,0 +1,21 @@
+@Salon.Api_HostAddress = http://localhost:5285
+
+### Получить мастеров со стажем >= 5 лет
+GET {{Salon.Api_HostAddress}}/api/analytics/masters-experience
+Accept: application/json
+
+### Получить свободные окошки мастера (замени GUID на реальный)
+GET {{Salon.Api_HostAddress}}/api/analytics/free-slots/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Получить топ-5 услуг
+GET {{Salon.Api_HostAddress}}/api/analytics/top-services
+Accept: application/json
+
+### Получить повторные записи
+GET {{Salon.Api_HostAddress}}/api/analytics/repeat-appointments
+Accept: application/json
+
+### Получить лояльных клиентов
+GET {{Salon.Api_HostAddress}}/api/analytics/loyal-clients
+Accept: application/json

@@ -7,7 +7,7 @@
 
 Решение разделено на 3 проекта (чистая архитектура):
 * **`Salon.Domain`** — Ядро приложения. Содержит доменные модели (`Client`, `Master`, `Service`, `Appointment`), перечисления (`Gender`, `ServiceCategory`), базовые классы и `DataSeed` (тестовые данные из 1-й лабы).
-* **`Salon.Api`** — Веб-слой. Содержит контроллеры, DTO (Data Transfer Objects), настройки Swagger и `InMemoryStorage` (хранилище данных в памяти).
+* **`Salon.Api`** - Веб-слой. Содержит контроллеры, DTO (Data Transfer Objects), настройки Swagger и `InMemoryStorage` (хранилище данных в памяти).
 * **`Salon.Tests`** — Проект с юнит-тестами (xUnit) из 1-й лабораторной работы.
 
 

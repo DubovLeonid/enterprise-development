@@ -25,4 +25,4 @@ jobs:
         run: dotnet build Salon.Domain.slnx --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test Salon.Domain.slnx --configuration Release --no-build
+        run: dotnet test Salon.Domain.slnx --configuration Release --no-build --logger "console;verbosity=detailed"
