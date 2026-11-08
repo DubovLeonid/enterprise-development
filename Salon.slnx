@@ -6,7 +6,6 @@
     <Project Path="src/Salon.Contracts/Salon.Contracts.csproj" />
     <Project Path="src/Salon.Domain/Salon.Domain.csproj" />
     <Project Path="src/Salon.Infrastructure.EntityFrameworkCore/Salon.Infrastructure.EntityFrameworkCore.csproj" Id="198f0388-51ca-46d8-aaa7-f9ee2759f243" />
-    <Project Path="src/Salon.Infrastructure.InMemory/Salon.Infrastructure.InMemory.csproj" />
     <Project Path="src/Salon.ServiceDefaults/Salon.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/tests/">

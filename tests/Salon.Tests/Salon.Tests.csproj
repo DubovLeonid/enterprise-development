@@ -20,7 +20,6 @@
     <ProjectReference Include="..\..\src\Salon.Application\Salon.Application.csproj" />
     <ProjectReference Include="..\..\src\Salon.Domain\Salon.Domain.csproj" />
     <ProjectReference Include="..\..\src\Salon.Infrastructure.EntityFrameworkCore\Salon.Infrastructure.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\src\Salon.Infrastructure.InMemory\Salon.Infrastructure.InMemory.csproj" />
   </ItemGroup>  
 
   <ItemGroup>
