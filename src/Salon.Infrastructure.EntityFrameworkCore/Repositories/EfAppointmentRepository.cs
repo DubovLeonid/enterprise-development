@@ -26,7 +26,12 @@ public class EfAppointmentRepository(SalonDbContext context) : IAppointmentRepos
     /// Получить запись по идентификатору.
     /// </summary>
     public async Task<Appointment?> GetByIdAsync(Guid id)
-        => await context.Appointments.FirstOrDefaultAsync(a => a.Id == id);
+    => await context.Appointments
+        .AsNoTracking()
+        .Include(a => a.Client)   
+        .Include(a => a.Master)   
+        .Include(a => a.Service) 
+        .FirstOrDefaultAsync(a => a.Id == id);
 
     /// <summary>
     /// Добавить новую запись.
