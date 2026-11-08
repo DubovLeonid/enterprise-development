@@ -1,8 +1,10 @@
 using Salon.Application.Services;
+using Microsoft.EntityFrameworkCore;
 using Salon.Contracts.Interfaces;
 using Salon.Domain.Interfaces;
 using Salon.Domain.Seeds;
-using Salon.Infrastructure.InMemory.Repositories;
+using Salon.Infrastructure.EntityFrameworkCore.Context;
+using Salon.Infrastructure.EntityFrameworkCore.Repositories;
 using Salon.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,10 +20,15 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddSingleton<IClientRepository, InMemoryClientRepository>();
-builder.Services.AddSingleton<IMasterRepository, InMemoryMasterRepository>();
-builder.Services.AddSingleton<IServiceRepository, InMemoryServiceRepository>();
-builder.Services.AddSingleton<IAppointmentRepository, InMemoryAppointmentRepository>();
+
+builder.AddMySqlDbContext<SalonDbContext>("salon-db");
+
+
+builder.Services.AddScoped<IClientRepository, EfClientRepository>();
+builder.Services.AddScoped<IMasterRepository, EfMasterRepository>();
+builder.Services.AddScoped<IServiceRepository, EfServiceRepository>();
+builder.Services.AddScoped<IAppointmentRepository, EfAppointmentRepository>();
+
 
 builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddScoped<IClientService, ClientService>();
@@ -33,21 +40,23 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
+
 using (var scope = app.Services.CreateScope())
 {
-    var seed = new DataSeed();
+    var dbContext = scope.ServiceProvider.GetRequiredService<SalonDbContext>();
 
-    var clientRepo = scope.ServiceProvider.GetRequiredService<IClientRepository>();
-    foreach (var client in seed.Clients) await clientRepo.AddAsync(client);
+    dbContext.Database.Migrate();
 
-    var masterRepo = scope.ServiceProvider.GetRequiredService<IMasterRepository>();
-    foreach (var master in seed.Masters) await masterRepo.AddAsync(master);
-
-    var serviceRepo = scope.ServiceProvider.GetRequiredService<IServiceRepository>();
-    foreach (var service in seed.Services) await serviceRepo.AddAsync(service);
-
-    var appointmentRepo = scope.ServiceProvider.GetRequiredService<IAppointmentRepository>();
-    foreach (var appointment in seed.Appointments) await appointmentRepo.AddAsync(appointment);
+    
+    if (!dbContext.Clients.Any())
+    {
+        var seed = new DataSeed();
+        dbContext.Clients.AddRange(seed.Clients);
+        dbContext.Masters.AddRange(seed.Masters);
+        dbContext.Services.AddRange(seed.Services);
+        dbContext.Appointments.AddRange(seed.Appointments);
+        dbContext.SaveChanges();
+    }
 }
 
 if (app.Environment.IsDevelopment())

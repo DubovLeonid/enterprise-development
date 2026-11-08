@@ -11,12 +11,18 @@
 
 	<ItemGroup>
 		<!-- Ставим классический Swashbuckle, который отлично работает с .NET 10 -->
+		<PackageReference Include="Aspire.Pomelo.EntityFrameworkCore.MySql" Version="13.6.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Salon.Application\Salon.Application.csproj" />
 	  <ProjectReference Include="..\Salon.Contracts\Salon.Contracts.csproj" />
+	  <ProjectReference Include="..\Salon.Infrastructure.EntityFrameworkCore\Salon.Infrastructure.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\Salon.Infrastructure.InMemory\Salon.Infrastructure.InMemory.csproj" />
 	  <ProjectReference Include="..\Salon.ServiceDefaults\Salon.ServiceDefaults.csproj" />
 	</ItemGroup>
