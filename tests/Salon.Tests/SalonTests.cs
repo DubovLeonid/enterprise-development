@@ -1,6 +1,10 @@
-﻿using Salon.Application.Services;
+﻿using Microsoft.EntityFrameworkCore;
+using Salon.Application.Services;
+using Salon.Domain.Interfaces;
 using Salon.Domain.Seeds;
-using Salon.Infrastructure.InMemory.Repositories;
+using Salon.Infrastructure.EntityFrameworkCore.Context;
+using Salon.Infrastructure.EntityFrameworkCore.Repositories;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Salon.Tests;
@@ -13,29 +17,44 @@ public class SalonTests(ITestOutputHelper output) : IAsyncLifetime
     private readonly ITestOutputHelper _output = output;
     private readonly DataSeed _data = new();
     private AnalyticsService _analyticsService = null!;
-
-    private readonly InMemoryClientRepository _clientRepo = new();
-    private readonly InMemoryMasterRepository _masterRepo = new();
-    private readonly InMemoryServiceRepository _serviceRepo = new();
-    private readonly InMemoryAppointmentRepository _appointmentRepo = new();
+    private SalonDbContext _context = null!;
 
     /// <summary>
-    /// Асинхронная инициализация репозиториев перед запуском тестов.
+    /// Асинхронная инициализация: настройка EF Core In-Memory, заполнение данными и создание сервиса.
     /// </summary>
     public async Task InitializeAsync()
     {
-        foreach (var c in _data.Clients) await _clientRepo.AddAsync(c);
-        foreach (var m in _data.Masters) await _masterRepo.AddAsync(m);
-        foreach (var s in _data.Services) await _serviceRepo.AddAsync(s);
-        foreach (var a in _data.Appointments) await _appointmentRepo.AddAsync(a);
+        
+        var options = new DbContextOptionsBuilder<SalonDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
 
-        _analyticsService = new AnalyticsService(_masterRepo, _appointmentRepo, _serviceRepo, _clientRepo);
+        _context = new SalonDbContext(options);
+
+       
+        var clientRepo = new EfClientRepository(_context);
+        var masterRepo = new EfMasterRepository(_context);
+        var serviceRepo = new EfServiceRepository(_context);
+        var appointmentRepo = new EfAppointmentRepository(_context);
+
+       
+        await _context.Clients.AddRangeAsync(_data.Clients);
+        await _context.Masters.AddRangeAsync(_data.Masters);
+        await _context.Services.AddRangeAsync(_data.Services);
+        await _context.Appointments.AddRangeAsync(_data.Appointments);
+        await _context.SaveChangesAsync();
+
+       
+        _analyticsService = new AnalyticsService(masterRepo, appointmentRepo, serviceRepo, clientRepo);
     }
 
     /// <summary>
-    /// Уборка после тестов (ничего делать не нужно).
+    /// Освобождение ресурсов после тестов.
     /// </summary>
-    public Task DisposeAsync() => Task.CompletedTask;
+    public async Task DisposeAsync()
+    {
+        await _context.DisposeAsync();
+    }
 
     /// <summary>
     /// Тест 1. Выводит всех мастеров со стажем не менее 5 лет.
@@ -53,6 +72,7 @@ public class SalonTests(ITestOutputHelper output) : IAsyncLifetime
 
         Assert.Equal(expectedCount, result.Count);
 
+        // Проверяем сортировку по убыванию стажа
         for (var i = 0; i < result.Count - 1; i++)
         {
             Assert.True(result[i].ExperienceYears >= result[i + 1].ExperienceYears);
@@ -69,7 +89,8 @@ public class SalonTests(ITestOutputHelper output) : IAsyncLifetime
         var expectedDurationMinutes = 30;
 
         var response = await _analyticsService.GetFreeSlotsForMasterAsync(selectedMaster.Id);
-        Assert.NotNull(response);
+
+        Assert.NotNull(response); 
         var windows = response.Windows;
 
         _output.WriteLine($"Свободные окошки у мастера {response.Master}:");

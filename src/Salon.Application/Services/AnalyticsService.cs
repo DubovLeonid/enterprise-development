@@ -90,12 +90,12 @@ public class AnalyticsService(
         var appointments = await _appointmentRepo.GetAllAsync();
 
         var top = appointments
-            .GroupBy(a => a.Service)
+            .GroupBy(a => a.ServiceId) 
             .Select(g => new TopServiceDto
             {
-                ServiceId = g.Key.Id,
-                ServiceName = g.Key.Name,
-                Category = g.Key.Category.ToString(),
+                ServiceId = g.Key,
+                ServiceName = g.First().Service.Name,       
+                Category = g.First().Service.Category.ToString(),
                 Count = g.Count()
             })
             .OrderByDescending(x => x.Count)
@@ -123,11 +123,11 @@ public class AnalyticsService(
 
         var clients = appointments
             .Where(a => a.StartTime >= startDate && a.StartTime < endDate && a.IsRegular)
-            .GroupBy(a => a.Client)
+            .GroupBy(a => a.ClientId) // <-- Группируем по Id
             .Select(g => new RepeatClientDto
             {
-                ClientId = g.Key.Id,
-                ClientName = g.Key.FullName,
+                ClientId = g.Key,
+                ClientName = g.First().Client.FullName, 
                 Total = g.Count(),
                 Repeat = g.Count() - 1
             })
@@ -153,14 +153,14 @@ public class AnalyticsService(
         var appointments = await _appointmentRepo.GetAllAsync();
 
         var clients = appointments
-            .GroupBy(a => a.Client)
-            .Where(g => g.Select(a => a.Master.Id).Distinct().Count() > 1)
+            .GroupBy(a => a.ClientId) // <-- Группируем по Id
+            .Where(g => g.Select(a => a.MasterId).Distinct().Count() > 1)
             .Select(g => new LoyalClientDto
             {
-                ClientId = g.Key.Id,
-                ClientName = g.Key.FullName,
-                BirthDate = g.Key.BirthDate,
-                MastersCount = g.Select(a => a.Master.Id).Distinct().Count()
+                ClientId = g.Key,
+                ClientName = g.First().Client.FullName, // <-- Берем имя из первого элемента
+                BirthDate = g.First().Client.BirthDate,
+                MastersCount = g.Select(a => a.MasterId).Distinct().Count()
             })
             .OrderBy(x => x.BirthDate)
             .ToList();

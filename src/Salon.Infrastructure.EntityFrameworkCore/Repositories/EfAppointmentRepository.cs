@@ -15,7 +15,12 @@ public class EfAppointmentRepository(SalonDbContext context) : IAppointmentRepos
     /// Получить список всех записей.
     /// </summary>
     public async Task<IReadOnlyList<Appointment>> GetAllAsync()
-        => await context.Appointments.AsNoTracking().ToListAsync();
+    => await context.Appointments
+        .AsNoTracking()
+        .Include(a => a.Client)   
+        .Include(a => a.Master)   
+        .Include(a => a.Service)  
+        .ToListAsync();
 
     /// <summary>
     /// Получить запись по идентификатору.
@@ -58,5 +63,11 @@ public class EfAppointmentRepository(SalonDbContext context) : IAppointmentRepos
     /// Найти записи, соответствующие заданному условию.
     /// </summary>
     public async Task<IReadOnlyList<Appointment>> FindAsync(Expression<Func<Appointment, bool>> predicate)
-        => await context.Appointments.AsNoTracking().Where(predicate).ToListAsync();
+    => await context.Appointments
+        .AsNoTracking()
+        .Include(a => a.Client)
+        .Include(a => a.Service) 
+        .Include(a => a.Master)  
+        .Where(predicate)
+        .ToListAsync();
 }
