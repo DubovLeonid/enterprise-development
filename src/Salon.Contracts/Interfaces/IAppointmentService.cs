@@ -32,11 +32,11 @@ public interface IAppointmentService
     /// </summary>
     /// <param name="id">Идентификатор обновляемой записи.</param>
     /// <param name="dto">Новые данные записи.</param>
-    public Task UpdateAsync(Guid id, CreateAppointmentDto dto);
+    public Task<bool> UpdateAsync(Guid id, CreateAppointmentDto dto);
 
     /// <summary>
     /// Удалить запись по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемой записи.</param>
-    public Task DeleteAsync(Guid id);
+    public Task<bool> DeleteAsync(Guid id);
 }

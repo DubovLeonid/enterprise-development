@@ -40,16 +40,18 @@ public class AnalyticsController(IAnalyticsService analyticsService, ILogger<Ana
     /// </summary>
     [HttpGet("free-slots/{masterId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)] 
     public async Task<IActionResult> GetFreeSlots(Guid masterId)
     {
         try
         {
             if (_logger.IsEnabled(LogLevel.Information))
-            {
                 _logger.LogInformation("Запрос аналитики: свободные окошки мастера {MasterId}", masterId);
-            }
+
             var result = await _analyticsService.GetFreeSlotsForMasterAsync(masterId);
+
+            if (result == null) return NotFound();
+
             return Ok(result);
         }
         catch (Exception ex)

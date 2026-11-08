@@ -32,11 +32,11 @@ public interface IMasterService
     /// </summary>
     /// <param name="id">Идентификатор обновляемого мастера.</param>
     /// <param name="dto">Новые данные мастера.</param>
-    public Task UpdateAsync(Guid id, CreateMasterDto dto);
+    public Task<bool> UpdateAsync(Guid id, CreateMasterDto dto);
 
     /// <summary>
     /// Удалить мастера по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемого мастера.</param>
-    public Task DeleteAsync(Guid id);
+    public Task<bool> DeleteAsync(Guid id);
 }

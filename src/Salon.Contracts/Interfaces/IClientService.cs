@@ -32,11 +32,11 @@ public interface IClientService
     /// </summary>
     /// <param name="id">Идентификатор обновляемого клиента.</param>
     /// <param name="dto">Новые данные клиента.</param>
-    public Task UpdateAsync(Guid id, CreateClientDto dto);
+    public Task<bool> UpdateAsync(Guid id, CreateClientDto dto);
 
     /// <summary>
     /// Удалить клиента по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемого клиента.</param>
-    public Task DeleteAsync(Guid id);
+    public Task<bool> DeleteAsync(Guid id);
 }

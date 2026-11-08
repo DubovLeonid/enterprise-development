@@ -89,10 +89,10 @@ public class MasterService(IMasterRepository masterRepo) : IMasterService
     /// </summary>
     /// <param name="id">Идентификатор обновляемого мастера.</param>
     /// <param name="dto">Новые данные мастера.</param>
-    public async Task UpdateAsync(Guid id, CreateMasterDto dto)
+    public async Task<bool> UpdateAsync(Guid id, CreateMasterDto dto)
     {
         var existing = await _masterRepo.GetByIdAsync(id);
-        if (existing == null) return;
+        if (existing == null) return false; 
 
         var updated = new Master
         {
@@ -105,11 +105,19 @@ public class MasterService(IMasterRepository masterRepo) : IMasterService
             ExperienceYears = dto.ExperienceYears
         };
         await _masterRepo.UpdateAsync(updated);
+        return true; 
     }
 
     /// <summary>
     /// Удалить мастера по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемого мастера.</param>
-    public async Task DeleteAsync(Guid id) => await _masterRepo.DeleteAsync(id);
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var existing = await _masterRepo.GetByIdAsync(id);
+        if (existing == null) return false; 
+
+        await _masterRepo.DeleteAsync(id);
+        return true; 
+    }
 }

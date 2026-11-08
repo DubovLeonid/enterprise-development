@@ -70,6 +70,7 @@ public class ServicesController(
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(ServiceDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ServiceDto>> Create(CreateServiceDto dto)
     {
@@ -94,6 +95,7 @@ public class ServicesController(
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateServiceDto dto)
     {
@@ -102,7 +104,14 @@ public class ServicesController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Обновление услуги с Id {Id}", id);
 
-            await _serviceService.UpdateAsync(id, dto);
+            var success = await _serviceService.UpdateAsync(id, dto);
+
+            if (!success)
+            {
+                _logger.LogWarning("Услуга с Id {Id} не найдена для обновления", id);
+                return NotFound(); 
+            }
+
             return NoContent();
         }
         catch (Exception ex)
@@ -117,6 +126,7 @@ public class ServicesController(
     /// </summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -125,7 +135,14 @@ public class ServicesController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Удаление услуги с Id {Id}", id);
 
-            await _serviceService.DeleteAsync(id);
+            var success = await _serviceService.DeleteAsync(id);
+
+            if (!success)
+            {
+                _logger.LogWarning("Услуга с Id {Id} не найдена для удаления", id);
+                return NotFound(); 
+            }
+
             return NoContent();
         }
         catch (Exception ex)

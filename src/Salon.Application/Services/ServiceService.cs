@@ -81,25 +81,24 @@ public class ServiceService(IServiceRepository serviceRepo) : IServiceService
     /// </summary>
     /// <param name="id">Идентификатор обновляемой услуги.</param>
     /// <param name="dto">Новые данные услуги.</param>
-    public async Task UpdateAsync(Guid id, CreateServiceDto dto)
+    public async Task<bool> UpdateAsync(Guid id, CreateServiceDto dto)
     {
         var existing = await _serviceRepo.GetByIdAsync(id);
-        if (existing == null) return;
-
-        var updated = new Service
-        {
-            Id = id,
-            Name = dto.Name,
-            Category = dto.Category,
-            Price = dto.Price,
-            Duration = TimeSpan.FromMinutes(dto.DurationMinutes)
-        };
+        if (existing == null) return false;
+        var updated = new Service { Id = id, Name = dto.Name, Category = dto.Category, Price = dto.Price, Duration = TimeSpan.FromMinutes(dto.DurationMinutes) };
         await _serviceRepo.UpdateAsync(updated);
+        return true;
     }
 
     /// <summary>
     /// Удалить услугу по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемой услуги.</param>
-    public async Task DeleteAsync(Guid id) => await _serviceRepo.DeleteAsync(id);
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var existing = await _serviceRepo.GetByIdAsync(id);
+        if (existing == null) return false;
+        await _serviceRepo.DeleteAsync(id);
+        return true;
+    }
 }

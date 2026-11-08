@@ -88,10 +88,10 @@ public class AppointmentService(IAppointmentRepository appointmentRepo) : IAppoi
     /// </summary>
     /// <param name="id">Идентификатор обновляемой записи.</param>
     /// <param name="dto">Новые данные записи.</param>
-    public async Task UpdateAsync(Guid id, CreateAppointmentDto dto)
+    public async Task<bool> UpdateAsync(Guid id, CreateAppointmentDto dto)
     {
         var existing = await _appointmentRepo.GetByIdAsync(id);
-        if (existing == null) return;
+        if (existing == null) return false; 
 
         var updated = new Appointment
         {
@@ -106,11 +106,19 @@ public class AppointmentService(IAppointmentRepository appointmentRepo) : IAppoi
             Service = null!
         };
         await _appointmentRepo.UpdateAsync(updated);
+        return true; 
     }
 
     /// <summary>
     /// Удалить запись по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемой записи.</param>
-    public async Task DeleteAsync(Guid id) => await _appointmentRepo.DeleteAsync(id);
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var existing = await _appointmentRepo.GetByIdAsync(id);
+        if (existing == null) return false; 
+
+        await _appointmentRepo.DeleteAsync(id);
+        return true; 
+    }
 }

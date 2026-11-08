@@ -70,6 +70,7 @@ public class AppointmentsController(
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(AppointmentDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<AppointmentDto>> Create(CreateAppointmentDto dto)
     {
@@ -93,6 +94,7 @@ public class AppointmentsController(
     /// </summary>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateAppointmentDto dto)
@@ -102,7 +104,14 @@ public class AppointmentsController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Обновление записи с Id {Id}", id);
 
-            await _appointmentService.UpdateAsync(id, dto);
+            var success = await _appointmentService.UpdateAsync(id, dto);
+
+            if (!success)
+            {
+                _logger.LogWarning("Запись с Id {Id} не найдена для обновления", id);
+                return NotFound();
+            }
+
             return NoContent();
         }
         catch (Exception ex)
@@ -117,6 +126,7 @@ public class AppointmentsController(
     /// </summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -125,7 +135,14 @@ public class AppointmentsController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Удаление записи с Id {Id}", id);
 
-            await _appointmentService.DeleteAsync(id);
+            var success = await _appointmentService.DeleteAsync(id);
+
+            if (!success)
+            {
+                _logger.LogWarning("Запись с Id {Id} не найдена для удаления", id);
+                return NotFound();
+            }
+
             return NoContent();
         }
         catch (Exception ex)

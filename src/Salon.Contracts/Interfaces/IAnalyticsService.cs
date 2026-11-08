@@ -18,7 +18,7 @@ public interface IAnalyticsService
     /// </summary>
     /// <param name="masterId">Идентификатор мастера.</param>
     /// <returns>Объект с информацией о мастере и списком свободных окон.</returns>
-    public Task<FreeSlotsResponseDto> GetFreeSlotsForMasterAsync(Guid masterId);
+    public Task<FreeSlotsResponseDto?> GetFreeSlotsForMasterAsync(Guid masterId);
 
     /// <summary>
     /// Получить топ-5 наиболее популярных услуг по количеству записей.

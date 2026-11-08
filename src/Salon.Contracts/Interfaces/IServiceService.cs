@@ -32,11 +32,11 @@ public interface IServiceService
     /// </summary>
     /// <param name="id">Идентификатор обновляемой услуги.</param>
     /// <param name="dto">Новые данные услуги.</param>
-    public Task UpdateAsync(Guid id, CreateServiceDto dto);
+    public Task<bool> UpdateAsync(Guid id, CreateServiceDto dto);
 
     /// <summary>
     /// Удалить услугу по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемой услуги.</param>
-    public Task DeleteAsync(Guid id);
+    public Task<bool> DeleteAsync(Guid id);
 }

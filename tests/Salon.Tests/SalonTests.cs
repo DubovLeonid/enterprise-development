@@ -69,6 +69,7 @@ public class SalonTests(ITestOutputHelper output) : IAsyncLifetime
         var expectedDurationMinutes = 30;
 
         var response = await _analyticsService.GetFreeSlotsForMasterAsync(selectedMaster.Id);
+        Assert.NotNull(response);
         var windows = response.Windows;
 
         _output.WriteLine($"Свободные окошки у мастера {response.Master}:");

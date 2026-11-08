@@ -80,25 +80,24 @@ public class ClientService(IClientRepository clientRepo) : IClientService
     /// </summary>
     /// <param name="id">Идентификатор обновляемого клиента.</param>
     /// <param name="dto">Новые данные клиента.</param>
-    public async Task UpdateAsync(Guid id, CreateClientDto dto)
+    public async Task<bool> UpdateAsync(Guid id, CreateClientDto dto)
     {
-        var client = await _clientRepo.GetByIdAsync(id);
-        if (client == null) return;
-
-        var updated = new Client
-        {
-            Id = id,
-            FullName = dto.FullName,
-            Phone = dto.Phone,
-            Gender = dto.Gender,
-            BirthDate = dto.BirthDate
-        };
+        var existing = await _clientRepo.GetByIdAsync(id);
+        if (existing == null) return false;
+        var updated = new Client { Id = id, FullName = dto.FullName, Phone = dto.Phone, Gender = dto.Gender, BirthDate = dto.BirthDate };
         await _clientRepo.UpdateAsync(updated);
+        return true;
     }
 
     /// <summary>
     /// Удалить клиента по идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор удаляемого клиента.</param>
-    public async Task DeleteAsync(Guid id) => await _clientRepo.DeleteAsync(id);
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var existing = await _clientRepo.GetByIdAsync(id);
+        if (existing == null) return false;
+        await _clientRepo.DeleteAsync(id);
+        return true;
+    }
 }

@@ -70,6 +70,7 @@ public class MastersController(
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(MasterDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<MasterDto>> Create(CreateMasterDto dto)
     {
@@ -94,6 +95,7 @@ public class MastersController(
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateMasterDto dto)
     {
@@ -102,7 +104,14 @@ public class MastersController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Обновление мастера с Id {Id}", id);
 
-            await _masterService.UpdateAsync(id, dto);
+            var success = await _masterService.UpdateAsync(id, dto);
+
+            if (!success)
+            {
+                _logger.LogWarning("Мастер с Id {Id} не найден для обновления", id);
+                return NotFound(); 
+            }
+
             return NoContent();
         }
         catch (Exception ex)
@@ -117,6 +126,7 @@ public class MastersController(
     /// </summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -125,7 +135,14 @@ public class MastersController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Удаление мастера с Id {Id}", id);
 
-            await _masterService.DeleteAsync(id);
+            var success = await _masterService.DeleteAsync(id);
+
+            if (!success)
+            {
+                _logger.LogWarning("Мастер с Id {Id} не найден для удаления", id);
+                return NotFound(); 
+            }
+
             return NoContent();
         }
         catch (Exception ex)

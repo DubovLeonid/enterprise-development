@@ -70,6 +70,7 @@ public class ClientsController(
     /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(ClientDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ClientDto>> Create(CreateClientDto dto)
     {
@@ -94,6 +95,7 @@ public class ClientsController(
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateClientDto dto)
     {
@@ -102,7 +104,8 @@ public class ClientsController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Обновление клиента с Id {Id}", id);
 
-            await _clientService.UpdateAsync(id, dto);
+            var success = await _clientService.UpdateAsync(id, dto);
+            if (!success) return NotFound();
             return NoContent();
         }
         catch (Exception ex)
@@ -117,6 +120,7 @@ public class ClientsController(
     /// </summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -125,7 +129,8 @@ public class ClientsController(
             if (_logger.IsEnabled(LogLevel.Information))
                 _logger.LogInformation("Удаление клиента с Id {Id}", id);
 
-            await _clientService.DeleteAsync(id);
+            var success = await _clientService.DeleteAsync(id);
+            if (!success) return NotFound();
             return NoContent();
         }
         catch (Exception ex)

@@ -45,9 +45,11 @@ public class AnalyticsService(
     /// <param name="masterId">Идентификатор мастера.</param>
     /// <returns>Объект с информацией о мастере и списком свободных окон.</returns>
     /// <exception cref="Exception">Выбрасывается, если мастер с указанным ID не найден.</exception>
-    public async Task<FreeSlotsResponseDto> GetFreeSlotsForMasterAsync(Guid masterId)
+    public async Task<FreeSlotsResponseDto?> GetFreeSlotsForMasterAsync(Guid masterId)
     {
-        var master = await _masterRepo.GetByIdAsync(masterId) ?? throw new Exception("Мастер не найден");
+        var master = await _masterRepo.GetByIdAsync(masterId);
+        if (master == null) return null;
+
         var appointments = await _appointmentRepo.FindAsync(a => a.MasterId == masterId);
         var sorted = appointments.OrderBy(a => a.StartTime).ToList();
 
