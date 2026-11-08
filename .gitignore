@@ -1,3 +1,4 @@
+*.Backup.tmp
 bin/
 obj/
 .vs/
