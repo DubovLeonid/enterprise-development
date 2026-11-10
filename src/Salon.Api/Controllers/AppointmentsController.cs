@@ -127,6 +127,7 @@ public class AppointmentsController(
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -144,6 +145,11 @@ public class AppointmentsController(
             }
 
             return NoContent();
+        }
+        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        {
+            _logger.LogWarning(ex, "Попытка удалить запись, на которую ссылаются другие объекты");
+            return Conflict("Невозможно удалить запись, так как на неё ссылаются другие объекты.");
         }
         catch (Exception ex)
         {

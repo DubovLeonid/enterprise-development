@@ -20,7 +20,9 @@ public class EfServiceRepository(SalonDbContext context) : IServiceRepository
     /// Получить услугу по идентификатору.
     /// </summary>
     public async Task<Service?> GetByIdAsync(Guid id)
-        => await context.Services.FirstOrDefaultAsync(s => s.Id == id);
+    => await context.Services
+        .AsNoTracking()
+        .FirstOrDefaultAsync(s => s.Id == id);
 
     /// <summary>
     /// Добавить новую услугу.

@@ -95,7 +95,7 @@ public class ServicesController(
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)] 
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateServiceDto dto)
     {
@@ -109,7 +109,7 @@ public class ServicesController(
             if (!success)
             {
                 _logger.LogWarning("Услуга с Id {Id} не найдена для обновления", id);
-                return NotFound(); 
+                return NotFound();
             }
 
             return NoContent();
@@ -127,6 +127,7 @@ public class ServicesController(
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -140,10 +141,15 @@ public class ServicesController(
             if (!success)
             {
                 _logger.LogWarning("Услуга с Id {Id} не найдена для удаления", id);
-                return NotFound(); 
+                return NotFound();
             }
 
             return NoContent();
+        }
+        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        {
+            _logger.LogWarning(ex, "Попытка удалить услугу, на которую ссылаются записи");
+            return Conflict("Невозможно удалить услугу, так как на неё ссылаются записи.");
         }
         catch (Exception ex)
         {

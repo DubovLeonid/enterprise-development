@@ -45,17 +45,16 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<SalonDbContext>();
 
-    dbContext.Database.Migrate();
+    await dbContext.Database.MigrateAsync();
 
-    
-    if (!dbContext.Clients.Any())
+    if (!await dbContext.Clients.AnyAsync())
     {
         var seed = new DataSeed();
-        dbContext.Clients.AddRange(seed.Clients);
-        dbContext.Masters.AddRange(seed.Masters);
-        dbContext.Services.AddRange(seed.Services);
-        dbContext.Appointments.AddRange(seed.Appointments);
-        dbContext.SaveChanges();
+        await dbContext.Clients.AddRangeAsync(seed.Clients);
+        await dbContext.Masters.AddRangeAsync(seed.Masters);
+        await dbContext.Services.AddRangeAsync(seed.Services);
+        await dbContext.Appointments.AddRangeAsync(seed.Appointments);
+        await dbContext.SaveChangesAsync();
     }
 }
 

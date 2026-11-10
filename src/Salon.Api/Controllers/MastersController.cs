@@ -95,7 +95,7 @@ public class MastersController(
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)] 
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateMasterDto dto)
     {
@@ -109,7 +109,7 @@ public class MastersController(
             if (!success)
             {
                 _logger.LogWarning("Мастер с Id {Id} не найден для обновления", id);
-                return NotFound(); 
+                return NotFound();
             }
 
             return NoContent();
@@ -127,6 +127,7 @@ public class MastersController(
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -140,10 +141,15 @@ public class MastersController(
             if (!success)
             {
                 _logger.LogWarning("Мастер с Id {Id} не найден для удаления", id);
-                return NotFound(); 
+                return NotFound();
             }
 
             return NoContent();
+        }
+        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        {
+            _logger.LogWarning(ex, "Попытка удалить мастера, на которого ссылаются записи");
+            return Conflict("Невозможно удалить мастера, так как на него ссылаются записи.");
         }
         catch (Exception ex)
         {

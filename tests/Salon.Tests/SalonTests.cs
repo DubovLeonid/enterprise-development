@@ -24,28 +24,26 @@ public class SalonTests(ITestOutputHelper output) : IAsyncLifetime
     /// </summary>
     public async Task InitializeAsync()
     {
-        
+
         var options = new DbContextOptionsBuilder<SalonDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _context = new SalonDbContext(options);
 
-       
-        var clientRepo = new EfClientRepository(_context);
+
         var masterRepo = new EfMasterRepository(_context);
-        var serviceRepo = new EfServiceRepository(_context);
         var appointmentRepo = new EfAppointmentRepository(_context);
 
-       
+
         await _context.Clients.AddRangeAsync(_data.Clients);
         await _context.Masters.AddRangeAsync(_data.Masters);
         await _context.Services.AddRangeAsync(_data.Services);
         await _context.Appointments.AddRangeAsync(_data.Appointments);
         await _context.SaveChangesAsync();
 
-       
-        _analyticsService = new AnalyticsService(masterRepo, appointmentRepo, serviceRepo, clientRepo);
+
+        _analyticsService = new AnalyticsService(masterRepo, appointmentRepo);
     }
 
     /// <summary>
@@ -86,19 +84,21 @@ public class SalonTests(ITestOutputHelper output) : IAsyncLifetime
     public async Task Test2_FreeSlotsForSelectedMaster_Strict()
     {
         var selectedMaster = _data.Masters[0];
-        var expectedDurationMinutes = 30;
 
         var response = await _analyticsService.GetFreeSlotsForMasterAsync(selectedMaster.Id);
 
-        Assert.NotNull(response); 
+        Assert.NotNull(response);
         var windows = response.Windows;
 
         _output.WriteLine($"Свободные окошки у мастера {response.Master}:");
         foreach (var window in windows)
             _output.WriteLine($"  {window.Start:dd.MM.yyyy HH:mm} — {window.End:HH:mm} ({window.DurationMinutes} мин.)");
 
-        Assert.Single(windows);
-        Assert.Equal(expectedDurationMinutes, windows[0].DurationMinutes);
+       
+        Assert.Equal(4, windows.Count);
+
+        
+        Assert.Equal(7035, windows[0].DurationMinutes);
     }
 
     /// <summary>

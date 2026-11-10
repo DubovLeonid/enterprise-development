@@ -9,14 +9,10 @@ namespace Salon.Application.Services;
 /// </summary>
 public class AnalyticsService(
     IMasterRepository masterRepo,
-    IAppointmentRepository appointmentRepo,
-    IServiceRepository serviceRepo,
-    IClientRepository clientRepo) : IAnalyticsService
+    IAppointmentRepository appointmentRepo) : IAnalyticsService
 {
     private readonly IMasterRepository _masterRepo = masterRepo;
     private readonly IAppointmentRepository _appointmentRepo = appointmentRepo;
-    private readonly IServiceRepository _serviceRepo = serviceRepo;
-    private readonly IClientRepository _clientRepo = clientRepo;
 
     /// <summary>
     /// Возвращает список мастеров, чей стаж работы составляет не менее 5 лет.
@@ -123,7 +119,7 @@ public class AnalyticsService(
 
         var clients = appointments
             .Where(a => a.StartTime >= startDate && a.StartTime < endDate && a.IsRegular)
-            .GroupBy(a => a.ClientId) // <-- Группируем по Id
+            .GroupBy(a => a.ClientId) 
             .Select(g => new RepeatClientDto
             {
                 ClientId = g.Key,
@@ -153,12 +149,12 @@ public class AnalyticsService(
         var appointments = await _appointmentRepo.GetAllAsync();
 
         var clients = appointments
-            .GroupBy(a => a.ClientId) // <-- Группируем по Id
+            .GroupBy(a => a.ClientId) 
             .Where(g => g.Select(a => a.MasterId).Distinct().Count() > 1)
             .Select(g => new LoyalClientDto
             {
                 ClientId = g.Key,
-                ClientName = g.First().Client.FullName, // <-- Берем имя из первого элемента
+                ClientName = g.First().Client.FullName, 
                 BirthDate = g.First().Client.BirthDate,
                 MastersCount = g.Select(a => a.MasterId).Distinct().Count()
             })

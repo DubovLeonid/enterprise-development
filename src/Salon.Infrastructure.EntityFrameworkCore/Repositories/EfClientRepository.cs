@@ -20,7 +20,9 @@ public class EfClientRepository(SalonDbContext context) : IClientRepository
     /// Получить клиента по идентификатору.
     /// </summary>
     public async Task<Client?> GetByIdAsync(Guid id)
-        => await context.Clients.FirstOrDefaultAsync(c => c.Id == id);
+    => await context.Clients
+        .AsNoTracking()
+        .FirstOrDefaultAsync(c => c.Id == id);
 
     /// <summary>
     /// Добавить нового клиента.

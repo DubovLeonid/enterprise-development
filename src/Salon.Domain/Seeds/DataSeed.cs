@@ -97,28 +97,28 @@ public class DataSeed
         }
 
         Add(c[0], m[0], s[0], new DateTime(2026, 9, 10, 9, 0, 0), true);
-        Add(c[1], m[0], s[1], new DateTime(2026, 9, 10, 10, 30, 0), false);
-        Add(c[2], m[0], s[2], new DateTime(2026, 9, 10, 13, 0, 0), true);
+        Add(c[1], m[2], s[1], new DateTime(2026, 9, 10, 10, 30, 0), false);
+        Add(c[2], m[3], s[2], new DateTime(2026, 9, 10, 13, 0, 0), true);
 
         Add(c[0], m[1], s[0], new DateTime(2026, 9, 2, 10, 0, 0), true);
         Add(c[3], m[2], s[1], new DateTime(2026, 9, 4, 10, 0, 0), false);
-        Add(c[0], m[2], s[3], new DateTime(2026, 9, 5, 11, 0, 0), true);
+        Add(c[0], m[0], s[3], new DateTime(2026, 9, 5, 11, 0, 0), true);
         Add(c[1], m[1], s[0], new DateTime(2026, 9, 6, 10, 0, 0), true);
         Add(c[4], m[3], s[2], new DateTime(2026, 9, 7, 12, 0, 0), false);
         Add(c[5], m[4], s[4], new DateTime(2026, 9, 8, 13, 0, 0), true);
         Add(c[6], m[1], s[0], new DateTime(2026, 9, 9, 14, 0, 0), false);
-        Add(c[7], m[5], s[1], new DateTime(2026, 9, 11, 10, 0, 0), true);
-        Add(c[8], m[6], s[3], new DateTime(2026, 9, 12, 12, 0, 0), false);
-        Add(c[9], m[7], s[2], new DateTime(2026, 9, 13, 15, 0, 0), true);
+        Add(c[7], m[2], s[1], new DateTime(2026, 9, 11, 10, 0, 0), true);
+        Add(c[8], m[0], s[3], new DateTime(2026, 9, 12, 12, 0, 0), false);
+        Add(c[9], m[3], s[2], new DateTime(2026, 9, 13, 15, 0, 0), true);
         Add(c[2], m[1], s[0], new DateTime(2026, 9, 14, 10, 0, 0), true);
         Add(c[3], m[2], s[1], new DateTime(2026, 9, 15, 11, 0, 0), true);
-        Add(c[4], m[3], s[0], new DateTime(2026, 9, 15, 14, 0, 0), false);
-        Add(c[5], m[4], s[2], new DateTime(2026, 9, 16, 13, 0, 0), true);
-        Add(c[6], m[5], s[1], new DateTime(2026, 9, 17, 11, 0, 0), false);
-        Add(c[7], m[6], s[4], new DateTime(2026, 9, 18, 12, 0, 0), true);
-        Add(c[8], m[7], s[3], new DateTime(2026, 9, 19, 15, 0, 0), false);
+        Add(c[4], m[0], s[0], new DateTime(2026, 9, 15, 14, 0, 0), false);
+        Add(c[5], m[3], s[2], new DateTime(2026, 9, 16, 13, 0, 0), true);
+        Add(c[6], m[2], s[1], new DateTime(2026, 9, 17, 11, 0, 0), false);
+        Add(c[7], m[4], s[4], new DateTime(2026, 9, 18, 12, 0, 0), true);
+        Add(c[8], m[0], s[3], new DateTime(2026, 9, 19, 15, 0, 0), false);
 
-        Add(c[9], m[9], s[5], new DateTime(2026, 7, 15, 10, 0, 0), true);
+        Add(c[9], m[5], s[5], new DateTime(2026, 7, 15, 10, 0, 0), true);
         Add(c[9], m[8], s[6], new DateTime(2026, 8, 15, 10, 0, 0), true);
 
         return appointments;

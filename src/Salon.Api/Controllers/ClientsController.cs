@@ -95,7 +95,7 @@ public class ClientsController(
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)] 
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateClientDto dto)
     {
@@ -121,6 +121,7 @@ public class ClientsController(
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)] 
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -132,6 +133,11 @@ public class ClientsController(
             var success = await _clientService.DeleteAsync(id);
             if (!success) return NotFound();
             return NoContent();
+        }
+        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        {
+            _logger.LogWarning(ex, "Попытка удалить клиента, на которого ссылаются записи");
+            return Conflict("Невозможно удалить клиента, так как на него ссылаются записи.");
         }
         catch (Exception ex)
         {

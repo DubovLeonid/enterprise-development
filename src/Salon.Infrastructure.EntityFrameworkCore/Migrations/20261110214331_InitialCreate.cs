@@ -19,9 +19,9 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                Phone = table.Column<string>(type: "longtext", nullable: false)
+                Phone = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
-                FullName = table.Column<string>(type: "longtext", nullable: false)
+                FullName = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
                 Gender = table.Column<int>(type: "int", nullable: false),
                 BirthDate = table.Column<DateOnly>(type: "date", nullable: false)
@@ -37,12 +37,12 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                PassportNumber = table.Column<string>(type: "longtext", nullable: false)
+                PassportNumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
-                Specialization = table.Column<string>(type: "longtext", nullable: false)
+                Specialization = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
                 ExperienceYears = table.Column<int>(type: "int", nullable: false),
-                FullName = table.Column<string>(type: "longtext", nullable: false)
+                FullName = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
                 Gender = table.Column<int>(type: "int", nullable: false),
                 BirthDate = table.Column<DateOnly>(type: "date", nullable: false)
@@ -58,10 +58,10 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                Name = table.Column<string>(type: "longtext", nullable: false)
+                Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
                 Category = table.Column<int>(type: "int", nullable: false),
-                Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                Price = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                 Duration = table.Column<TimeSpan>(type: "time(6)", nullable: false)
             },
             constraints: table =>
@@ -119,6 +119,12 @@ public partial class InitialCreate : Migration
             name: "IX_Appointments_ServiceId",
             table: "Appointments",
             column: "ServiceId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Masters_PassportNumber",
+            table: "Masters",
+            column: "PassportNumber",
+            unique: true);
     }
 
     /// <inheritdoc />

@@ -9,7 +9,6 @@
 * Salon.Domain — Ядро приложения. Содержит доменные модели (Client, Master, Service, Appointment), перечисления, интерфейсы репозиториев и DataSeed (тестовые данные).
 * Salon.Contracts — Слой контрактов. Содержит DTO (Data Transfer Objects) и интерфейсы сервисов (IAnalyticsService, IClientService и т.д.).
 * Salon.Application — Слой бизнес-логики. Содержит реализации сервисов (аналитика, CRUD-операции, маппинг).
-* Salon.Infrastructure.InMemory — Слой инфраструктуры (In-Memory репозитории, используются в тестах).
 * Salon.Infrastructure.EntityFrameworkCore — Слой инфраструктуры для работы с реальной БД (DbContext, EF-репозитории, миграции).
 * Salon.Api — Веб-слой. Контроллеры, настройка DI, Swagger.
 * Salon.AppHost — Оркестратор .NET Aspire (точка входа для запуска).

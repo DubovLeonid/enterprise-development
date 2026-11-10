@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Salon.Domain.Models;
-using System.Diagnostics.Metrics;
 
 namespace Salon.Infrastructure.EntityFrameworkCore.Context;
 
@@ -15,6 +14,30 @@ public class SalonDbContext(DbContextOptions<SalonDbContext> options) : DbContex
     {
         base.OnModelCreating(modelBuilder);
 
+        
+        modelBuilder.Entity<Client>(entity =>
+        {
+            entity.Property(c => c.FullName).HasMaxLength(150);
+            entity.Property(c => c.Phone).HasMaxLength(20);
+        });
+
+        
+        modelBuilder.Entity<Master>(entity =>
+        {
+            entity.Property(m => m.FullName).HasMaxLength(150);
+            entity.Property(m => m.PassportNumber).HasMaxLength(10);
+            entity.Property(m => m.Specialization).HasMaxLength(100);
+            entity.HasIndex(m => m.PassportNumber).IsUnique(); 
+        });
+
+        
+        modelBuilder.Entity<Service>(entity =>
+        {
+            entity.Property(s => s.Name).HasMaxLength(100);
+            entity.Property(s => s.Price).HasPrecision(10, 2); 
+        });
+
+        
         modelBuilder.Entity<Appointment>()
             .HasOne(a => a.Client)
             .WithMany()

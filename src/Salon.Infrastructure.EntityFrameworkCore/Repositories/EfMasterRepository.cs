@@ -20,7 +20,9 @@ public class EfMasterRepository(SalonDbContext context) : IMasterRepository
     /// Получить мастера по идентификатору.
     /// </summary>
     public async Task<Master?> GetByIdAsync(Guid id)
-        => await context.Masters.FirstOrDefaultAsync(m => m.Id == id);
+    => await context.Masters
+        .AsNoTracking() 
+        .FirstOrDefaultAsync(m => m.Id == id);
 
     /// <summary>
     /// Добавить нового мастера.
