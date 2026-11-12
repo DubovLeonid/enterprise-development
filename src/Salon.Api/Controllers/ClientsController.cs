@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using Salon.Contracts.Dtos;
 using Salon.Contracts.Interfaces;
 
@@ -121,7 +123,7 @@ public class ClientsController(
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)] 
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -134,7 +136,7 @@ public class ClientsController(
             if (!success) return NotFound();
             return NoContent();
         }
-        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        catch (DbUpdateException ex) when (ex.InnerException is MySqlException mysqlEx && mysqlEx.Number == 1451)
         {
             _logger.LogWarning(ex, "Попытка удалить клиента, на которого ссылаются записи");
             return Conflict("Невозможно удалить клиента, так как на него ссылаются записи.");

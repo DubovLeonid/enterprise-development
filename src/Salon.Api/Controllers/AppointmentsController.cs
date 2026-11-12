@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using Salon.Contracts.Dtos;
 using Salon.Contracts.Interfaces;
 
@@ -127,7 +129,7 @@ public class AppointmentsController(
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)] 
+    [ProducesResponseType(StatusCodes.Status409Conflict)] // <-- Добавили
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -137,23 +139,17 @@ public class AppointmentsController(
                 _logger.LogInformation("Удаление записи с Id {Id}", id);
 
             var success = await _appointmentService.DeleteAsync(id);
-
-            if (!success)
-            {
-                _logger.LogWarning("Запись с Id {Id} не найдена для удаления", id);
-                return NotFound();
-            }
-
+            if (!success) return NotFound();
             return NoContent();
         }
-        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        catch (DbUpdateException ex) when (ex.InnerException is MySqlException mysqlEx && mysqlEx.Number == 1451)
         {
             _logger.LogWarning(ex, "Попытка удалить запись, на которую ссылаются другие объекты");
             return Conflict("Невозможно удалить запись, так как на неё ссылаются другие объекты.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ошибка при удалении записи с Id {Id}", id);
+            _logger.LogError(ex, "Ошибка при удалении записи {Id}", id);
             return StatusCode(500, "Внутренняя ошибка сервера");
         }
     }

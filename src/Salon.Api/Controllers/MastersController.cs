@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using Salon.Contracts.Dtos;
 using Salon.Contracts.Interfaces;
 
@@ -71,6 +73,7 @@ public class MastersController(
     [HttpPost]
     [ProducesResponseType(typeof(MasterDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<MasterDto>> Create(CreateMasterDto dto)
     {
@@ -81,6 +84,11 @@ public class MastersController(
 
             var result = await _masterService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is MySqlException mysqlEx && mysqlEx.Number == 1062)
+        {
+            _logger.LogWarning(ex, "Попытка создать мастера с дублирующимся паспортом");
+            return Conflict("Мастер с таким паспортом уже существует.");
         }
         catch (Exception ex)
         {
@@ -96,6 +104,7 @@ public class MastersController(
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(Guid id, CreateMasterDto dto)
     {
@@ -113,6 +122,11 @@ public class MastersController(
             }
 
             return NoContent();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is MySqlException mysqlEx && mysqlEx.Number == 1062)
+        {
+            _logger.LogWarning(ex, "Попытка обновить мастера на дублирующийся паспорт");
+            return Conflict("Мастер с таким паспортом уже существует.");
         }
         catch (Exception ex)
         {
@@ -146,7 +160,7 @@ public class MastersController(
 
             return NoContent();
         }
-        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        catch (DbUpdateException ex) when (ex.InnerException is MySqlException mysqlEx && mysqlEx.Number == 1451)
         {
             _logger.LogWarning(ex, "Попытка удалить мастера, на которого ссылаются записи");
             return Conflict("Невозможно удалить мастера, так как на него ссылаются записи.");

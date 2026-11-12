@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using Salon.Contracts.Dtos;
 using Salon.Contracts.Interfaces;
 
@@ -137,16 +139,10 @@ public class ServicesController(
                 _logger.LogInformation("Удаление услуги с Id {Id}", id);
 
             var success = await _serviceService.DeleteAsync(id);
-
-            if (!success)
-            {
-                _logger.LogWarning("Услуга с Id {Id} не найдена для удаления", id);
-                return NotFound();
-            }
-
+            if (!success) return NotFound();
             return NoContent();
         }
-        catch (Exception ex) when (ex.InnerException?.Message.Contains("foreign key") == true)
+        catch (DbUpdateException ex) when (ex.InnerException is MySqlException mysqlEx && mysqlEx.Number == 1451)
         {
             _logger.LogWarning(ex, "Попытка удалить услугу, на которую ссылаются записи");
             return Conflict("Невозможно удалить услугу, так как на неё ссылаются записи.");
